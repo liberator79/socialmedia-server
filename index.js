@@ -11,7 +11,7 @@ const morgan = require("morgan")
 const multer = require("multer")
 const postRouter = require("./routes/posts.routes")
 const authRouter = require("./routes/auth.routes")
-
+const userRouter = require("./routes/users.routes")
 
 dotenv.config();
 app.use(express.json())
@@ -38,6 +38,7 @@ const upload = multer({ storage });
 app.post("/auth/register", upload.single("picture") ,register)
 app.use(authRouter)
 app.use(postRouter)
+app.use(userRouter)
 
 
 
