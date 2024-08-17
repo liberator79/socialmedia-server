@@ -1,9 +1,8 @@
-const User = require("../models/user.model")
-const Post = require("../models/posts.model")
+// post.controller.js
+const User = require("../models/user.model");
+const Post = require("../models/posts.model");
 
-
-//cretae post
-
+// Create Post
 module.exports.createPost = async (req, res) => {
     try {
         const { userId, postTitle, postDescription, picturePath } = req.body;
@@ -19,43 +18,46 @@ module.exports.createPost = async (req, res) => {
         });
         await newPost.save();
 
-        const post = await Post.find();
-        res.status(201).json(post);
+        const posts = await Post.find();
+        res.status(201).json(posts);
     } catch (e) {
         res.status(409).json({ message: e.message });
     }
-}
+};
 
-export const getFeedPosts = async (req, res) => {
+// Get Feed Posts
+module.exports.getFeedPosts = async (req, res) => {
     try {
-        const post = await Post.find();
-        res.status(200).json(post);
+        const posts = await Post.find();
+        res.status(200).json(posts);
     } catch (err) {
         res.status(404).json({ message: err.message });
     }
 };
 
-export const getUserPosts = async (req, res) => {
+// Get User Posts
+module.exports.getUserPosts = async (req, res) => {
     try {
         const { userId } = req.params;
-        const post = await Post.find({ userId });
-        res.status(200).json(post);
+        const posts = await Post.find({ userId });
+        res.status(200).json(posts);
     } catch (err) {
         res.status(404).json({ message: err.message });
     }
 };
 
-export const likePost = async (req, res) => {
+// Like/Unlike Post
+module.exports.likePost = async (req, res) => {
     try {
         const { id } = req.params;
         const { userId } = req.body;
         const post = await Post.findById(id);
-        const isLiked = post.likes.get(userId);
+        const isLiked = post.likes[userId];
 
         if (isLiked) {
-            post.likes.delete(userId);
+            delete post.likes[userId];
         } else {
-            post.likes.set(userId, true);
+            post.likes[userId] = true;
         }
 
         const updatedPost = await Post.findByIdAndUpdate(

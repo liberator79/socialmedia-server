@@ -5,9 +5,12 @@ const app = express();
 const dotenv = require("dotenv")
 const cors = require("cors")
 const bodyParser = require("body-parser")
+const path = require("path")
 const helmet = require("helmet")
 const morgan = require("morgan")
 const multer = require("multer")
+const postRouter = require("./routes/posts.routes")
+const authRouter = require("./routes/auth.routes")
 
 
 dotenv.config();
@@ -33,12 +36,18 @@ const upload = multer({ storage });
 //routes
 
 app.post("/auth/register", upload.single("picture") ,register)
+app.use(authRouter)
+app.use(postRouter)
+
+
+
+
 
 
 const PORT = process.env.PORT || 3002
 
 mongoose.connect(process.env.MONGO_URL).then(() => {
-    app.listen(process.env.PORT, () => { console.log("Server started") });
+    app.listen(PORT, () => { console.log("Server started") });
 }).catch((e) => {
     console.log(e);
 })
