@@ -7,6 +7,7 @@ module.exports.createPost = async (req, res) => {
     try {
         const { userId, postTitle, postDescription, picturePath } = req.body;
         const user = await User.findById(userId);
+        console.log(user);
         const newPost = new Post({
             userId,
             name: user.name,
