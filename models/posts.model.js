@@ -7,7 +7,7 @@ const postSchema = new Schema(
             type : String,
             required : true,
         },
-        postTitle : {
+        name : {
             type : String,
             required : true,
         },
